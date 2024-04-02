@@ -6,6 +6,7 @@ package com.tomp.sav_project;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
@@ -16,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
  * @author jackt
  */
 public class Admin_view extends javax.swing.JFrame {
-    
+
     private int IDD;
 
     /**
@@ -24,7 +25,7 @@ public class Admin_view extends javax.swing.JFrame {
      */
     public Admin_view(int ID) {
         initComponents();
-        
+
         IDD = ID;
     }
 
@@ -42,6 +43,8 @@ public class Admin_view extends javax.swing.JFrame {
         viewList = new javax.swing.JButton();
         newTicketAdmin = new javax.swing.JButton();
         enCoursList = new javax.swing.JButton();
+        editButton = new javax.swing.JButton();
+        DeleteButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMaximumSize(new java.awt.Dimension(942, 492));
@@ -52,14 +55,14 @@ public class Admin_view extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID_Ticket", "Nom", "Prenom", "Type", "Etat", "Description", "Date", "Jeu", "Accès"
+                "ID_Ticket", "Nom", "Prenom", "Type", "Etat", "Description", "Date", "Jeu"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -96,6 +99,22 @@ public class Admin_view extends javax.swing.JFrame {
             }
         });
 
+        editButton.setText("Modifier");
+        editButton.setBorder(null);
+        editButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editButtonActionPerformed(evt);
+            }
+        });
+
+        DeleteButton.setText("Supprimer");
+        DeleteButton.setBorder(null);
+        DeleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -103,10 +122,12 @@ public class Admin_view extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(viewList, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(newTicketAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(enCoursList, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                    .addComponent(newTicketAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(viewList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(enCoursList, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+                    .addComponent(editButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(DeleteButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 738, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -117,12 +138,15 @@ public class Admin_view extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(newTicketAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(48, 48, 48)
+                        .addComponent(newTicketAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(viewList, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(32, 32, 32)
-                        .addComponent(enCoursList, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(enCoursList, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(69, 69, 69)
+                        .addComponent(editButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(DeleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(48, Short.MAX_VALUE))
         );
 
@@ -204,8 +228,7 @@ public class Admin_view extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_viewListActionPerformed
 
-    
-    
+
     private void newTicketAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newTicketAdminActionPerformed
         new AdminTicket(IDD).setVisible(true);
     }//GEN-LAST:event_newTicketAdminActionPerformed
@@ -284,6 +307,47 @@ public class Admin_view extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_enCoursListActionPerformed
 
+    private void editButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editButtonActionPerformed
+
+        if (jTable1.getSelectedRow() != -1) {
+            if (jTable1.getSelectedRowCount() == 1) {
+                String value = (String) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+                int ticketID = Integer.valueOf(value);
+                new ticketEdit(ticketID, IDD).setVisible(true);
+
+            }
+        }
+
+    }//GEN-LAST:event_editButtonActionPerformed
+
+    private void DeleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteButtonActionPerformed
+        if (jTable1.getSelectedRow() != -1) {
+            if (jTable1.getSelectedRowCount() == 1) {
+                DefaultTableModel tblModel = (DefaultTableModel) jTable1.getModel();
+                String value = (String) jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+                int ticketID = Integer.valueOf(value);
+                try {
+                    //étape 1: charger la classe de driver
+                    Class.forName("com.mysql.jdbc.Driver");
+                    //étape 2: créer l'objet de connexion
+                    Connection conn = DriverManager.getConnection(
+                            "jdbc:mysql://localhost:3306/ppe?characterEncoding=utf8", "root", "");
+                    //étape 3: créer l'objet statement 
+                    PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM tickets WHERE ID_Ticket = ?");
+                    preparedStatement.setInt(1, ticketID);
+                    preparedStatement.executeUpdate();
+                    conn.close();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+                
+                tblModel.removeRow(jTable1.getSelectedRow());
+
+            }
+        }
+
+    }//GEN-LAST:event_DeleteButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -312,10 +376,11 @@ public class Admin_view extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton DeleteButton;
+    private javax.swing.JButton editButton;
     private javax.swing.JButton enCoursList;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
